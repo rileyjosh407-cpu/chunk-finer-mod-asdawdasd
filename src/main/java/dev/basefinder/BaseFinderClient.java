@@ -282,19 +282,55 @@ public final class BaseFinderClient implements ClientModInitializer {
 
         @Override
         public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-            context.fill(0, 0, width, height, 0xE9080D18);
-            int panelWidth = Math.min(430, width - 24);
+            // Prestige/Donut-inspired dark navy and violet settings shell.
+            context.fill(0, 0, width, height, 0xD9070A17);
+            int panelWidth = Math.min(570, width - 24);
+            int panelHeight = Math.min(height - 26, 390);
             int left = width / 2 - panelWidth / 2;
-            context.fill(left - 10, 28, left + panelWidth + 10, Math.min(height - 8, 370), 0xF0182235);
-            context.fill(left - 10, 28, left + panelWidth + 10, 32, 0xFF9D75FF);
-            context.drawCenteredTextWithShadow(textRenderer, Text.literal("BASE FINDER"), width / 2, 10, 0xFFE0B7FF);
-            context.drawCenteredTextWithShadow(textRenderer, Text.literal("SETTINGS  •  BLOCK FILTERS"), width / 2, 31, 0xFFB9C7E8);
+            int top = Math.max(12, height / 2 - panelHeight / 2);
+            int bottom = top + panelHeight;
+
+            context.fill(left - 2, top - 2, left + panelWidth + 2, bottom + 2, 0xFF070914);
+            context.fill(left, top, left + panelWidth, bottom, 0xF80D1025);
+            context.fill(left, top, left + 142, bottom, 0xFF10152C);
+            context.fill(left, top, left + 142, top + 3, 0xFF9C78FF);
+            context.fill(left + 154, top + 44, left + panelWidth - 12, top + 45, 0xFF292D4B);
+
+            context.drawTextWithShadow(textRenderer, Text.literal("♛ PRESTIGE ALPHA"), left + 12, top + 12, 0xFFE2D7FF);
+            context.drawTextWithShadow(textRenderer, Text.literal("BASE FINDER"), left + 12, top + 34, 0xFF9E80FF);
+            context.drawTextWithShadow(textRenderer, Text.literal("MODULES"), left + 12, top + 65, 0xFF7E89AB);
+            String[] nav = {"Combat", "Misc", "Movement", "Visual", "Donut"};
+            for (int i = 0; i < nav.length; i++) {
+                int ny = top + 82 + i * 23;
+                if (i == 4) context.fill(left + 7, ny - 4, left + 135, ny + 15, 0xFF332A69);
+                context.drawTextWithShadow(textRenderer, Text.literal((i == 4 ? "●  " : "›  ") + nav[i]),
+                        left + 15, ny, i == 4 ? 0xFFE5DCFF : 0xFFAAB4D0);
+            }
+            context.fill(left + 10, bottom - 45, left + 132, bottom - 44, 0xFF292D4B);
+            context.drawTextWithShadow(textRenderer, Text.literal("GENERAL"), left + 12, bottom - 34, 0xFF7E89AB);
+            context.drawTextWithShadow(textRenderer, Text.literal("⚙  Settings"), left + 12, bottom - 18, 0xFFAAB4D0);
+
+            int contentLeft = left + 158;
+            context.drawTextWithShadow(textRenderer, Text.literal("Donut Modules"), contentLeft, top + 12, 0xFFE4D9FF);
+            context.drawTextWithShadow(textRenderer, Text.literal("Block filters  •  saved locally"),
+                    contentLeft, top + 27, 0xFF8E9AB9);
+            context.fill(left + panelWidth - 158, top + 10, left + panelWidth - 12, top + 31, 0xFF151A31);
+            context.drawTextWithShadow(textRenderer, Text.literal("⌕  Search modules"), left + panelWidth - 151, top + 16, 0xFF687493);
+
+            // Card-like backgrounds behind the existing functional controls.
+            context.fill(contentLeft - 4, top + 51, left + panelWidth - 12, top + 75, 0xFF171C35);
+            context.fill(contentLeft - 4, top + 79, left + panelWidth - 12, top + 103, 0xFF171C35);
+            context.fill(contentLeft - 4, top + 106, left + panelWidth - 12, top + 130, 0xFF171C35);
+            context.fill(contentLeft - 4, top + 133, left + panelWidth - 12, top + 157, 0xFF171C35);
+            context.fill(contentLeft - 4, top + 160, left + panelWidth - 12, bottom - 35, 0xFF11162C);
+            context.fill(contentLeft - 4, top + 160, contentLeft - 1, bottom - 35, 0xFF9C78FF);
+
             int pages = (filterBlocks.size() + FILTERS_PER_PAGE - 1) / FILTERS_PER_PAGE;
             context.drawTextWithShadow(textRenderer,
                     Text.literal("Toggle the blocks that count as clues  •  Page " + (filterPage + 1) + "/" + pages),
-                    left, 137, 0xFFD5DDF0);
+                    contentLeft, top + 145, 0xFFD5DDF0);
             context.drawCenteredTextWithShadow(textRenderer,
-                    Text.literal("F8 menu  •  G scanner  •  R rescan  •  [ ] radius"), width / 2, height - 14, 0xFF9CAAC4);
+                    Text.literal("F8 menu  •  G scanner  •  R rescan  •  [ ] radius"), width / 2, height - 10, 0xFF9CAAC4);
             super.render(context, mouseX, mouseY, delta);
         }
 
