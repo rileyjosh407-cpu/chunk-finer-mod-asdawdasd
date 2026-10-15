@@ -193,8 +193,26 @@ public final class BaseFinderClient implements ClientModInitializer {
         if (client.world == null) return;
         for (FoundBlock item : found) {
             BlockPos p = item.pos();
-            double x = p.getX() + 0.5, y = p.getY() + 0.5, z = p.getZ() + 0.5;
-            // Bright END_ROD markers at corners and midpoints make detections easier to spot.
+            Block block = client.world.getBlockState(p).getBlock();
+            // Distinct vanilla particle palettes make each clue type easier to identify.
+            net.minecraft.particle.ParticleEffect markerParticle;
+            if (block == Blocks.SPAWNER) {
+                markerParticle = ParticleTypes.PORTAL; // purple
+            } else if (block == Blocks.ANCIENT_DEBRIS) {
+                markerParticle = ParticleTypes.FLAME; // orange
+            } else if (block == Blocks.BUDDING_AMETHYST || block == Blocks.AMETHYST_BLOCK
+                    || block == Blocks.AMETHYST_CLUSTER || block == Blocks.LARGE_AMETHYST_BUD
+                    || block == Blocks.MEDIUM_AMETHYST_BUD || block == Blocks.SMALL_AMETHYST_BUD) {
+                markerParticle = ParticleTypes.END_ROD; // bright white
+            } else if (block == Blocks.CHEST || block == Blocks.TRAPPED_CHEST || block == Blocks.BARREL
+                    || block == Blocks.ENDER_CHEST || block == Blocks.SHULKER_BOX) {
+                markerParticle = ParticleTypes.HAPPY_VILLAGER; // green
+            } else if (block == Blocks.HOPPER || block == Blocks.DROPPER || block == Blocks.DISPENSER
+                    || block == Blocks.FURNACE || block == Blocks.BLAST_FURNACE || block == Blocks.SMOKER) {
+                markerParticle = ParticleTypes.SOUL_FIRE_FLAME; // cyan-blue
+            } else {
+                markerParticle = ParticleTypes.WITCH; // purple-pink for other utility blocks
+            }
             double[][] markers = {
                     {-0.42, 0.95, -0.42}, {0.42, 0.95, -0.42},
                     {-0.42, 0.95, 0.42}, {0.42, 0.95, 0.42},
@@ -203,8 +221,9 @@ public final class BaseFinderClient implements ClientModInitializer {
                     {-0.42, 0.55, -0.42}, {0.42, 0.55, -0.42},
                     {-0.42, 0.55, 0.42}, {0.42, 0.55, 0.42}
             };
+            double x = p.getX() + 0.5, z = p.getZ() + 0.5;
             for (double[] marker : markers) {
-                client.world.addParticleClient(ParticleTypes.END_ROD,
+                client.world.addParticleClient(markerParticle,
                         x + marker[0], p.getY() + marker[1], z + marker[2], 0, 0.005, 0);
             }
         }
