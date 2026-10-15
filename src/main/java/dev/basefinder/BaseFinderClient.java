@@ -89,7 +89,7 @@ public final class BaseFinderClient implements ClientModInitializer {
                 notifyPlayer(client, "Base Finder radius: " + radius + " blocks");
                 if (enabled) tickCounter = 39;
             }
-            if (enabled && highlightsEnabled && client.player != null && client.world != null && ++highlightTick >= 5) {
+            if (enabled && highlightsEnabled && client.player != null && client.world != null && ++highlightTick >= 1) {
                 highlightTick = 0;
                 highlightFoundBlocks(client);
             }
@@ -224,7 +224,7 @@ public final class BaseFinderClient implements ClientModInitializer {
             double x = p.getX() + 0.5, z = p.getZ() + 0.5;
             for (double[] marker : markers) {
                 client.world.addParticleClient(markerParticle,
-                        x + marker[0], p.getY() + marker[1], z + marker[2], 0, 0.005, 0);
+                        x + marker[0], p.getY() + marker[1], z + marker[2], 0, 0.012, 0);
             }
         }
     }
@@ -239,47 +239,50 @@ public final class BaseFinderClient implements ClientModInitializer {
         protected void init() {
             clearChildren();
             int cx = width / 2;
-            int panelWidth = Math.min(430, width - 24);
+            int panelWidth = Math.min(570, width - 24);
+            int panelHeight = Math.min(height - 26, 390);
             int left = cx - panelWidth / 2;
-            int top = 42;
+            int top = Math.max(12, height / 2 - panelHeight / 2);
             addDrawableChild(ButtonWidget.builder(moduleLabel(), b -> {
                 chunkFinderEnabled = !chunkFinderEnabled;
                 b.setMessage(moduleLabel()); saveConfig();
                 if (enabled) tickCounter = 39;
-            }).dimensions(left, top, panelWidth, 20).build());
-            int half = (panelWidth - 8) / 2;
+            }).dimensions(contentLeft, top + 51, contentWidth, 20).build());
+            int contentLeft = left + 158;
+            int contentWidth = panelWidth - 174;
+            int half = (contentWidth - 8) / 2;
             addDrawableChild(ButtonWidget.builder(sensitivityLabel(), b -> {
                 sensitivity = sensitivity % 5 + 1; b.setMessage(sensitivityLabel()); saveConfig();
                 if (enabled) tickCounter = 39;
-            }).dimensions(left, top + 27, half, 20).build());
+            }).dimensions(contentLeft, top + 79, half, 20).build());
             addDrawableChild(ButtonWidget.builder(distanceLabel(), b -> {
                 simulationDistance = simulationDistance >= 16 ? 2 : simulationDistance + 2;
                 b.setMessage(distanceLabel()); saveConfig(); if (enabled) tickCounter = 39;
-            }).dimensions(left + half + 8, top + 27, half, 20).build());
+            }).dimensions(contentLeft + half + 8, top + 79, half, 20).build());
             addDrawableChild(ButtonWidget.builder(Text.literal("Highlights: " + (highlightsEnabled ? "ON" : "OFF")), b -> {
                 highlightsEnabled = !highlightsEnabled;
                 b.setMessage(Text.literal("Highlights: " + (highlightsEnabled ? "ON" : "OFF")));
                 saveConfig();
-            }).dimensions(left, top + 81, panelWidth, 20).build());
+            }).dimensions(contentLeft, top + 133, contentWidth, 20).build());
             addDrawableChild(ButtonWidget.builder(Text.literal("Scan radius: " + radius + " blocks"), b -> {
                 radius = radius >= MAX_RADIUS ? MIN_RADIUS : radius + 8;
                 b.setMessage(Text.literal("Scan radius: " + radius + " blocks")); saveConfig();
                 if (enabled) tickCounter = 39;
-            }).dimensions(left, top + 54, panelWidth, 20).build());
+            }).dimensions(contentLeft, top + 106, contentWidth, 20).build());
 
             int pages = (filterBlocks.size() + FILTERS_PER_PAGE - 1) / FILTERS_PER_PAGE;
             int first = filterPage * FILTERS_PER_PAGE;
             for (int i = first; i < Math.min(first + FILTERS_PER_PAGE, filterBlocks.size()); i++) {
                 final Block block = filterBlocks.get(i);
                 int local = i - first;
-                int bx = left + (local % 2) * (half + 8);
-                int by = top + 105 + (local / 2) * 22;
+                int bx = contentLeft + (local % 2) * (half + 8);
+                int by = top + 160 + (local / 2) * 22;
                 addDrawableChild(ButtonWidget.builder(filterLabel(block), b -> {
                     blockFilters.put(block, !blockFilters.getOrDefault(block, true));
                     b.setMessage(filterLabel(block)); saveConfig(); if (enabled) tickCounter = 39;
                 }).dimensions(bx, by, half, 20).build());
             }
-            int navY = top + 105 + 5 * 22 + 2;
+            int navY = Math.min(top + 160 + 5 * 22 + 2, height - 46);
             addDrawableChild(ButtonWidget.builder(Text.literal("< Previous"), b -> {
                 filterPage = (filterPage + pages - 1) % pages; init();
             }).dimensions(left, navY, half, 20).build());
