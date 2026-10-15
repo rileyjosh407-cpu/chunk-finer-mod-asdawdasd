@@ -1,0 +1,7 @@
+{
+  "key.basefinder.toggle": "Toggle Base Finder",
+  "key.basefinder.rescan": "Rescan nearby blocks",
+  "key.basefinder.radius_increase": "Increase scan radius",
+  "key.basefinder.radius_decrease": "Decrease scan radius",
+  "category.basefinder.controls": "Base Finder"
+}
