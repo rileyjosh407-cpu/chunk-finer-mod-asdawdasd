@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "id": "basefinder",
+  "version": "${version}",
+  "name": "Base Finder",
+  "description": "A client-side nearby utility-block scanner for loaded chunks.",
+  "authors": ["BaseFinder"],
+  "environment": "client",
+  "entrypoints": {
+    "client": ["dev.basefinder.BaseFinderClient"]
+  },
+  "depends": {
+    "fabricloader": ">=0.19.0",
+    "minecraft": "~1.21.11",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
