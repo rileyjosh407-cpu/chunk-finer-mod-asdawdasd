@@ -243,14 +243,14 @@ public final class BaseFinderClient implements ClientModInitializer {
             int panelHeight = Math.min(height - 26, 390);
             int left = cx - panelWidth / 2;
             int top = Math.max(12, height / 2 - panelHeight / 2);
+            int contentLeft = left + 158;
+            int contentWidth = panelWidth - 174;
+            int half = (contentWidth - 8) / 2;
             addDrawableChild(ButtonWidget.builder(moduleLabel(), b -> {
                 chunkFinderEnabled = !chunkFinderEnabled;
                 b.setMessage(moduleLabel()); saveConfig();
                 if (enabled) tickCounter = 39;
             }).dimensions(contentLeft, top + 51, contentWidth, 20).build());
-            int contentLeft = left + 158;
-            int contentWidth = panelWidth - 174;
-            int half = (contentWidth - 8) / 2;
             addDrawableChild(ButtonWidget.builder(sensitivityLabel(), b -> {
                 sensitivity = sensitivity % 5 + 1; b.setMessage(sensitivityLabel()); saveConfig();
                 if (enabled) tickCounter = 39;
